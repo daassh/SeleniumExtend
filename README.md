@@ -1,2 +1,2 @@
 # SeleniumExtend
-Extend Selenium2Library for Robot Framework.
+Extending Selenium2Library for Robot Framework.
