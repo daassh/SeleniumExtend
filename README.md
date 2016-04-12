@@ -1,5 +1,4 @@
 # SeleniumExtend
 Extending Selenium2Library for Robot Framework.
 
-how to use it?
-Loading SeleniumExtend.py file path instead of Selenium2Library.
+Instruction: Loading path of SeleniumExtend.py  instead of Selenium2Library.
