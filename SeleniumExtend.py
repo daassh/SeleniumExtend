@@ -319,14 +319,14 @@ class SeleniumExtend(Selenium2Library):
             message = "Page should have contained element '%s'" % (locator)
         self._wait_until_no_error_fixed(timeout, True, message, self.page_should_contain_element, locator, '', 'NONE')
     
-    def title_should_contain(self, *args):
-        """Verifies that current title contains `args`.
+    def title_should_contain(self, *title_piece):
+        """Verifies that current title contains `title_piece`.
         
         Examples:
         | Title Should Contain | GitHub | Hello | World |
         """
         title = self.get_title()
-        for expected in args:
+        for expected in title_piece:
             if None == re.search(expected, title):
                 raise AssertionError("Title should contain '%s' but was '%s'" % (expected, title))
         self._info("Page title is '%s'." % title)  
