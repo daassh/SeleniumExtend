@@ -45,8 +45,8 @@ class SeleniumExtend(Selenium2Library):
         """Click the nth element identified by `locator`.
         
         Examples:
-        |#Click the 2th element |          |   |
-        | Click Nth Element     | css=.btn | 2 |
+        | #Click the 2th element |          |   |
+        | Click Nth Element      | css=.btn | 2 |
         """
         try:
             nth = int(nth)
@@ -64,7 +64,7 @@ class SeleniumExtend(Selenium2Library):
         Fails if `timeout` expires before the click success.
         
         Examples:
-        |#Click the 2th element    |          |   |
+        | #Click the 2th element   |          |   |
         | Click Nth Until No Error | css=.btn | 2 |
         
         """
@@ -276,9 +276,9 @@ class SeleniumExtend(Selenium2Library):
         Only support JavaScript date widget.
         
         Examples:
-        | Set Date Js          | css=.datewidget | 2016-01-01 |
-        | #Using current date  |                 |            |
-        | Set Date Js          | css=.datewidget |            |
+        | Set Date Js         | css=.datewidget | 2016-01-01 |
+        | #Using current date |                 |            |
+        | Set Date Js         | css=.datewidget |            |
         """
         if datestring is not None:
             if len(datestring) < 8 or re.search('[^0-9-/]', datestring):
@@ -398,4 +398,3 @@ class SeleniumExtend(Selenium2Library):
                     raise AssertionError(u"Return ==> %s" % res)
                 break
             time.sleep(0.5)
-                
