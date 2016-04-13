@@ -80,6 +80,7 @@ class SeleniumExtend(Selenium2Library):
         """
         locator_css = self._format_css(locator_css)
         js = 'document.querySelector("'+ locator_css + '").click()'
+        self._info("JavaScript clicking element '%s'" % locator_css)
         self._current_browser().execute_script(js)
     
     def click_until_no_error_js(self, locator_css, message="", timeout=None):
@@ -340,7 +341,6 @@ class SeleniumExtend(Selenium2Library):
         | Title Should Contain In Time | GitHub, Hello, World   |             |     |
         | Title Should Contain In Time | [GitHub, Hello, World] | Check Title | 10s |
         """
-        
         if not isinstance(title_piece_list, list):
             piece_list = self._convert_to_list(title_piece_list)
         if not message:
@@ -367,14 +367,14 @@ class SeleniumExtend(Selenium2Library):
             else:
                 timeout_error = False
             if not timeout_error:
-                self._info(u"%s ==> PASS" % (message))
+                self._info(u"%s ==> PASS." % (message))
                 return res
             if time.time() > maxtime:
                 if not fail_raise_error:
-                    self._info(u"%s ==> NOT PASS" % (message))
+                    self._info(u"%s ==> NOT PASS." % (message))
                     break
                 else:
-                    raise AssertionError(u"%s ==> FAIL" % (message))
+                    raise AssertionError(u"%s ==> FAIL." % (message))
                     break
             time.sleep(0.5)
     
@@ -385,16 +385,16 @@ class SeleniumExtend(Selenium2Library):
             res = wait_func(*args)
             if res != value:
                 if message:
-                    self._info(u"%s ==> %s" % (message, res))
+                    self._info(u"%s ==> %s." % (message, res))
                 return res
             if time.time() > maxtime:
                 if not fail_raise_error:
                     if message:
-                        self._info(u"%s ==> %s" % (message, res))
+                        self._info(u"%s ==> %s." % (message, res))
                     return res
                 if message:
-                    raise AssertionError(u"%s ==> %s" % (message, res))
+                    raise AssertionError(u"%s ==> %s." % (message, res))
                 else:
-                    raise AssertionError(u"Return ==> %s" % res)
+                    raise AssertionError(u"Return ==> %s." % res)
                 break
             time.sleep(0.5)
