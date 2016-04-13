@@ -294,17 +294,17 @@ class SeleniumExtend(Selenium2Library):
         self.js_remove_attr(locator_css, "readOnly")
         self.js_set_attr("value", datestring)
     
-    def page_should_contain_in_time(self, text, message="", timeout=None):
+    def page_should_contain_text_in_time(self, text, message="", timeout=None):
         """Verifies text is not found on the current page in setting time.
         
         Fails if `timeout` expires before find page contain text.
         
         Examples:
-        | Page Should Contain In Time | Sign up for GitHub |                 |     |
-        | Page Should Contain In Time | Sign up for GitHub | check home page | 10s |
+        | Page Should Contain Text In Time | Sign up for GitHub |                 |     |
+        | Page Should Contain Text In Time | Sign up for GitHub | check home page | 10s |
         """
         if not message:
-            message = "Page should have contained '%s'" % (text)
+            message = "Page should have contained text '%s'" % (text)
         self._wait_until_no_error_fixed(timeout, True, message, self.page_should_contain, text, 'NONE')
 
     def page_should_contain_element_in_time(self, locator, message="", timeout=None):
