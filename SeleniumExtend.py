@@ -51,9 +51,9 @@ class SeleniumExtend(Selenium2Library):
         try:
             nth = int(nth)
         except ValueError, e:
-            raise ValueError("'%s' is not a number" % (nth))
+            raise ValueError(u"'%s' is not a number" % (nth))
         if nth <= 0:
-            raise ValueError("'nth' must bigger then 0")
+            raise ValueError(u"'nth' must bigger then 0")
         elements = self.get_webelements(locator)
         self._info("Clicking %dth element '%s'" % (nth, locator))
         elements[nth-1].click()
@@ -80,7 +80,7 @@ class SeleniumExtend(Selenium2Library):
         """
         locator_css = self._format_css(locator_css)
         js = 'document.querySelector("'+ locator_css + '").click()'
-        self._info("JavaScript clicking element '%s'" % locator_css)
+        self._info("JavaScript clicking element '%s'" % (locator_css))
         self._current_browser().execute_script(js)
     
     def click_until_no_error_js(self, locator_css, message="", timeout=None):
@@ -161,7 +161,7 @@ class SeleniumExtend(Selenium2Library):
         """
         file_path = file_path.encode("utf-8") if os.path.isabs(file_path) else os.path.join(os.getcwd(), file_path.encode("utf-8"))
         if not os.path.exists(file_path):
-            raise ValueError("path file '%s' is not exists." % file_path)
+            raise ValueError(u"path file '%s' is not exists." % file_path)
         if not message:
             message = "Choosing file '%s' from button '%s'" % (file_path, locator)
         self._wait_until_no_error_fixed(timeout, True, message, self.choose_file, locator, file_path)
@@ -283,7 +283,7 @@ class SeleniumExtend(Selenium2Library):
         """
         if datestring is not None:
             if len(datestring) < 8 or re.search('[^0-9-/]', datestring):
-                raise ValueError("date string should like 'YYYYMMDD','YYYY-MM-DD','YYYY/MM/DD'")           
+                raise ValueError(u"date string should like 'YYYYMMDD','YYYY-MM-DD','YYYY/MM/DD'")           
             if re.search('[-/]', datestring) is None:
                 datestring = datestring[0:4] + '-' + datestring[4:6] + '-' + datestring[6:8]
                 print datestring
@@ -329,8 +329,8 @@ class SeleniumExtend(Selenium2Library):
         title = self.get_title()
         for expected in title_piece:
             if None == re.search(expected, title):
-                raise AssertionError("Title should contain '%s' but was '%s'" % (expected, title))
-        self._info("Page title is '%s'." % title)  
+                raise AssertionError(u"Title should contain '%s' but was '%s'" % (expected, title))
+        self._info("Page title is '%s'." % (title))  
     
     def title_should_contain_in_time(self, title_piece_list, message="", timeout=None):
         """Verifies that current title contains `title_piece_list` in setting time.
@@ -344,16 +344,46 @@ class SeleniumExtend(Selenium2Library):
         if not isinstance(title_piece_list, list):
             piece_list = self._convert_to_list(title_piece_list)
         if not message:
-            message = "Page title should contain '%s'" % (title_piece_list)
+            message = "Title should contain '%s'" % (title_piece_list)
         self._wait_until_no_error_fixed(timeout, True, message, self.title_should_contain, *piece_list)
 
+    def wait_until_page_contains_elements(self, locator_list, message="", timeout=None):
+        """Waits until any element specified with `locator_list` appears on current page.
+
+        Fails if `timeout` expires before the element appears.
+        
+        Examples:
+        | Wait Until Page Contains Elements | name=unlogin, name=login   |                       |     |
+        | Wait Until Page Contains Elements | [name=unlogin, name=login] | wait elements appears | 10s |
+        """
+        if not isinstance(locator_list, list):
+            _locator_list = self._convert_to_list(locator_list)
+        message_info = "Wait Page contains %s" % (" or ".join(["'"+i+"'" for i in _locator_list]))
+        if not message:
+            message = message_info
+        self._info(u"%s." % (message_info))
+        timeout = robot.utils.timestr_to_secs(timeout) if timeout is not None else 15
+        maxtime = time.time() + timeout
+        while True:
+            for locator in _locator_list:
+                if self._is_element_present(locator):
+                    self._info(u"%s ==> PASS." % (message))
+                    break
+            else:
+                if time.time() > maxtime:
+                    raise AssertionError(u"%s ==> FAIL." % (message))
+                    time.sleep(0.5)  
+                continue
+            break
+        
     def _format_css(self, locator_css):
         if len(locator_css) > 4 and locator_css[:4].lower() == u"css=":
             locator_css = locator_css[4:]
         return locator_css
     
     def _convert_to_list(self, str_list):
-        str_list = str_list.strip("[]")
+        if str_list.startswith('[') and str_list.endswith(']'):
+            str_list = str_list[1:-1]
         return [i.strip() for i in str_list.split(',')]
         
     def _wait_until_no_error_fixed(self, timeout, fail_raise_error, message, wait_func, *args):
@@ -395,6 +425,6 @@ class SeleniumExtend(Selenium2Library):
                 if message:
                     raise AssertionError(u"%s ==> %s." % (message, res))
                 else:
-                    raise AssertionError(u"Return ==> %s." % res)
+                    raise AssertionError(u"Return ==> %s." % (res))
                 break
             time.sleep(0.5)
