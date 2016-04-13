@@ -96,7 +96,7 @@ class SeleniumExtend(Selenium2Library):
         self._wait_until_no_error_fixed(timeout, True, message, self.click_element_js, locator_css)
         
     def click_if_exists_in_time(self, locator, message="", timeout=None):
-        """Try click element identified by `locator` in setting time..
+        """Try click element identified by `locator` in setting time.
         
         Ignore if `timeout` expires before the click success.
         
