@@ -323,7 +323,7 @@ class SeleniumExtend(Selenium2Library):
         """Verifies that current title contains `args`.
         
         Examples:
-        | Title Should Contains | GitHub | Hello | World |
+        | Title Should Contain | GitHub | Hello | World |
         """
         title = self.get_title()
         for expected in args:
