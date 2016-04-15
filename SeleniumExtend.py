@@ -78,8 +78,8 @@ class SeleniumExtend(Selenium2Library):
         Examples:
         | Click Element Js | css=.btn |
         """
-        locator_css = self._format_css(locator_css)
-        js = 'document.querySelector("'+ locator_css + '").click()'
+        locator_css_ = self._format_css(locator_css)
+        js = 'document.querySelector("'+ locator_css_ + '").click()'
         self._info("JavaScript clicking element '%s'" % (locator_css))
         self._current_browser().execute_script(js)
     
@@ -380,7 +380,7 @@ class SeleniumExtend(Selenium2Library):
         eq = locator_css.find('=')
         if eq != -1:
             if locator_css[0:eq].strip().lower() == "css":
-                return locator_css[eq+1:]
+                return locator_css[eq+1:].strip()
         return locator_css
     
     def _convert_to_list(self, str_list):
