@@ -353,8 +353,8 @@ class SeleniumExtend(Selenium2Library):
         Fails if `timeout` expires before the element appears.
         
         Examples:
-        | Wait Until Page Contains Elements | name=unlogin, name=login   |                       |     |
-        | Wait Until Page Contains Elements | [name=unlogin, name=login] | wait elements appears | 10s |
+        | Wait Until Page Contains Elements | name=unlogin, name=login   |                      |     |
+        | Wait Until Page Contains Elements | [name=unlogin, name=login] | wait elements appear | 10s |
         """
         if not isinstance(locator_list, list):
             _locator_list = self._convert_to_list(locator_list)
@@ -377,15 +377,17 @@ class SeleniumExtend(Selenium2Library):
             break
         
     def _format_css(self, locator_css):
-        if len(locator_css) > 4 and locator_css[:4].lower() == u"css=":
-            locator_css = locator_css[4:]
+        eq = locator_css.find('=')
+        if eq != -1:
+            if locator_css[0:eq].strip().lower() == "css":
+                return locator_css[eq+1:]
         return locator_css
     
     def _convert_to_list(self, str_list):
         if str_list.startswith('[') and str_list.endswith(']'):
             str_list = str_list[1:-1]
         return [i.strip() for i in str_list.split(',')]
-        
+    
     def _wait_until_no_error_fixed(self, timeout, fail_raise_error, message, wait_func, *args):
         timeout = robot.utils.timestr_to_secs(timeout) if timeout is not None else 15
         maxtime = time.time() + timeout
