@@ -7,6 +7,9 @@ import sys, time, re, os
 reload(sys)
 sys.setdefaultencoding('utf8')
 
+#set default timeout
+TIMEOUT=15
+
 class SeleniumExtend(Selenium2Library):
 
     ROBOT_LIBRARY_SCOPE = 'Global'
@@ -15,7 +18,7 @@ class SeleniumExtend(Selenium2Library):
     def __init__(self):
         Selenium2Library.__init__(self)
 
-    def input_until_no_error(self, locator, text, message="", timeout=None): 
+    def input_until_no_error(self, locator, text, message="", timeout=TIMEOUT): 
         """Try types the given `text` into text field identified by `locator` until no error occurred.
         
         Fails if `timeout` expires before the input success.
@@ -28,7 +31,7 @@ class SeleniumExtend(Selenium2Library):
             message = "Typing text '%s' into text field '%s'" % (text, locator)
         self._wait_until_no_error_fixed(timeout, True, message, self.input_text, locator, text)
     
-    def click_until_no_error(self, locator, message="", timeout=None):
+    def click_until_no_error(self, locator, message="", timeout=TIMEOUT):
         """Try click element identified by `locator` until no error occurred.
         
         Fails if `timeout` expires before the click success.
@@ -63,7 +66,7 @@ class SeleniumExtend(Selenium2Library):
         elif nth < 0:
             elements[nth].click()
         
-    def click_nth_until_no_error(self, locator, nth=1, message="", timeout=None):
+    def click_nth_until_no_error(self, locator, nth=1, message="", timeout=TIMEOUT):
         """Click the nth element identified by `locator` until no error occurred.
         
         Fails if `timeout` expires before the click success.
@@ -79,7 +82,7 @@ class SeleniumExtend(Selenium2Library):
             message = "Clicking %sth element '%s'" % (nth, locator)
         self._wait_until_no_error_fixed(timeout, True, message, self.click_nth_element, locator, nth)
         
-    def click_until_element_exists(self, locator, wait_locator, message="", timeout=None):
+    def click_until_element_exists(self, locator, wait_locator, message="", timeout=TIMEOUT):
         """Click element identified by `locator` until element identified by `wait_locator` appear.
         
         Fails if `timeout` expires before element identified by `wait_locator` appear.
@@ -98,7 +101,7 @@ class SeleniumExtend(Selenium2Library):
             self.page_should_contain_element(wait_locator)
         self._wait_until_no_error_fixed(timeout, True, message, click_if_not_exists)
     
-    def click_nth_until_element_exists(self, locator, nth, wait_locator, message="", timeout=None):
+    def click_nth_until_element_exists(self, locator, nth, wait_locator, message="", timeout=TIMEOUT):
         """Click the nth element identified by `locator` until element identified by `wait_locator` appear.
         
         Fails if `timeout` expires before element identified by `wait_locator` appear.
@@ -128,7 +131,7 @@ class SeleniumExtend(Selenium2Library):
         self._info("JavaScript clicking element '%s'" % (locator_css))
         self._current_browser().execute_script(js)
     
-    def click_until_no_error_js(self, locator_css, message="", timeout=None):
+    def click_until_no_error_js(self, locator_css, message="", timeout=TIMEOUT):
         """Try JavaScript click element identified by `locator_css` until no error occurred.
         
         Fails if `timeout` expires before the click success.
@@ -141,7 +144,7 @@ class SeleniumExtend(Selenium2Library):
             message = "JavaScript clicking element '%s'" % locator_css
         self._wait_until_no_error_fixed(timeout, True, message, self.click_element_js, locator_css)
         
-    def click_if_exists_in_time(self, locator, message="", timeout=None):
+    def click_if_exists_in_time(self, locator, message="", timeout=TIMEOUT):
         """Try click element identified by `locator` in setting time.
         
         Ignore if `timeout` expires before the click success.
@@ -154,7 +157,7 @@ class SeleniumExtend(Selenium2Library):
             message = "Clicking element '%s'" % locator
         self._wait_until_no_error_fixed(timeout, False, message, self.click_element, locator)
 
-    def click_if_exists_in_time_js(self, locator_css, message="", timeout=None):
+    def click_if_exists_in_time_js(self, locator_css, message="", timeout=TIMEOUT):
         """Try JavaScript click element identified by `locator_css` in setting time.
         
         Ignore if `timeout` expires before the JavaScript click success.
@@ -167,7 +170,7 @@ class SeleniumExtend(Selenium2Library):
             message = "JavaScript clicking element '%s'" % locator_css
         self._wait_until_no_error_fixed(timeout, False, message, self.click_element_js, locator_css)
         
-    def double_click_until_no_error(self, locator, message="", timeout=None):  
+    def double_click_until_no_error(self, locator, message="", timeout=TIMEOUT):  
         """Try double click element identified by `locator` until no error occurred.
         
         Fails if `timeout` expires before the click success.
@@ -180,7 +183,7 @@ class SeleniumExtend(Selenium2Library):
             message = "Double clicking element '%s'" % locator
         self._wait_until_no_error_fixed(timeout, True, message, self.double_click_element, locator)
         
-    def select_window_until_no_error(self, locator, message="", timeout=None):
+    def select_window_until_no_error(self, locator, message="", timeout=TIMEOUT):
         """Try selects the window matching locator and return previous window handle until no error occurred. 
         
         locator: any of name, title, url, window handle, excluded handle's list, or special words.
@@ -193,7 +196,7 @@ class SeleniumExtend(Selenium2Library):
             message = "Selecting window '%s'" % locator
         self._wait_until_no_error_fixed(timeout, True, message, self.select_window, locator)
     
-    def choose_file_until_no_error(self, locator, file_path, message="", timeout=None):
+    def choose_file_until_no_error(self, locator, file_path, message="", timeout=TIMEOUT):
         """Try inputs the `file_path` into file input field found by `locator` until no error occurred. 
         
         Fails if `timeout` expires before the choose file success.
@@ -211,7 +214,7 @@ class SeleniumExtend(Selenium2Library):
             message = "Choosing file '%s' from button '%s'" % (file_path, locator)
         self._wait_until_no_error_fixed(timeout, True, message, self.choose_file, locator, file_path)
     
-    def execute_javascript_until_no_error(self, js_code, message="", timeout=None):
+    def execute_javascript_until_no_error(self, js_code, message="", timeout=TIMEOUT):
         """Try executes the given JavaScript code until no error occurred.
         
         Fails if `timeout` expires before the execute JavaScript success.
@@ -224,7 +227,7 @@ class SeleniumExtend(Selenium2Library):
             message = "Executing JavaScript: %s" % js_code
         self._wait_until_no_error_fixed(timeout, True, message, self._current_browser().execute_script, js_code)
     
-    def select_radio_button_until_no_error(self, group_name, value, message="", timeout=None):
+    def select_radio_button_until_no_error(self, group_name, value, message="", timeout=TIMEOUT):
         """Try sets selection of radio button group identified by `group_name` to `value` until no error occurred.
         
         Fails if `timeout` expires before the select success.
@@ -238,7 +241,7 @@ class SeleniumExtend(Selenium2Library):
             message = "Selecting '%s' from radio button '%s'" % (value, group_name)
         self._wait_until_no_error_fixed(timeout, True, message, self.select_radio_button, group_name, value)
     
-    def select_from_list_until_no_error(self, locator, item_list, message="", timeout=None):
+    def select_from_list_until_no_error(self, locator, item_list, message="", timeout=TIMEOUT):
         """Try selects `item` from list identified by `locator` until no error occurred.
         
         Fails if `timeout` expires before the select success.
@@ -272,7 +275,7 @@ class SeleniumExtend(Selenium2Library):
         """
         return len(self.get_webelements(locator))
 
-    def get_element_count_in_time(self, locator, message="", timeout=None):
+    def get_element_count_in_time(self, locator, message="", timeout=TIMEOUT):
         """Count elements found by `locator` until result is not 0.
         
         Return 0 if `timeout` expires.
@@ -283,7 +286,7 @@ class SeleniumExtend(Selenium2Library):
         """
         return self._wait_until_not_value(timeout, 0, False, message, self.get_element_count, locator)
 
-    def get_element_count_in_time_js(self, locator_css, message="", timeout=None):
+    def get_element_count_in_time_js(self, locator_css, message="", timeout=TIMEOUT):
         """JavaScript count elements found by `locator_css` until result is not 0.
         
         Return 0 if `timeout` expires.
@@ -339,7 +342,7 @@ class SeleniumExtend(Selenium2Library):
         self.js_remove_attr(locator_css, "readOnly")
         self.js_set_attr("value", datestring)
     
-    def page_should_contain_text_in_time(self, text, message="", timeout=None):
+    def page_should_contain_text_in_time(self, text, message="", timeout=TIMEOUT):
         """Verifies text is found on the current page in setting time.
         
         Fails if `timeout` expires before find page contain text.
@@ -352,7 +355,7 @@ class SeleniumExtend(Selenium2Library):
             message = "Page should have contained text '%s' in %s" % (text, self._format_timeout(timeout))
         self._wait_until_no_error_fixed(timeout, True, message, self.page_should_contain, text, 'NONE')
 
-    def page_should_contain_element_in_time(self, locator, message="", timeout=None):
+    def page_should_contain_element_in_time(self, locator, message="", timeout=TIMEOUT):
         """Verifies element identified by `locator` is found on the current page in setting time.
         
         Fails if `timeout` expires before find page contain locator element.
@@ -365,7 +368,7 @@ class SeleniumExtend(Selenium2Library):
             message = "Page should have contained element '%s' in %s" % (locator, self._format_timeout(timeout))
         self._wait_until_no_error_fixed(timeout, True, message, self.page_should_contain_element, locator, '', 'NONE')
     
-    def page_should_visible_element_in_time(self, locator, message="", timeout=None):
+    def page_should_visible_element_in_time(self, locator, message="", timeout=TIMEOUT):
         """Verifies element identified by `locator` is visible on the current page in setting time.
         
         Fails if `timeout` expires before find page visible locator element.
@@ -381,7 +384,7 @@ class SeleniumExtend(Selenium2Library):
                 raise AssertionError(message)
         self._wait_until_no_error_fixed(timeout, True, message, check_visibility)
         
-    def page_should_not_visible_element_in_time(self, locator, message="", timeout=None):
+    def page_should_not_visible_element_in_time(self, locator, message="", timeout=TIMEOUT):
         """Verifies element identified by `locator` is not visible on the current page in setting time.
         
         Fails if `timeout` expires before find page not visible locator element.
@@ -409,7 +412,7 @@ class SeleniumExtend(Selenium2Library):
                 raise AssertionError(u"Title should contain '%s' but was '%s'" % (expected, title))
         self._info("Page title is '%s'." % (title))  
     
-    def title_should_contain_in_time(self, title_piece_list, message="", timeout=None):
+    def title_should_contain_in_time(self, title_piece_list, message="", timeout=TIMEOUT):
         """Verifies that current title contains `title_piece_list` in setting time.
         
         Fails if `timeout` expires before find page contains `title_piece_list`.
@@ -424,7 +427,7 @@ class SeleniumExtend(Selenium2Library):
             message = "Title should contain '%s' in %s" % (title_piece_list, self._format_timeout(timeout))
         self._wait_until_no_error_fixed(timeout, True, message, self.title_should_contain, *piece_list)
 
-    def wait_until_page_contains_elements(self, locator_list, message="", timeout=None):
+    def wait_until_page_contains_elements(self, locator_list, message="", timeout=TIMEOUT):
         """Waits until any element specified with `locator_list` appears on current page.
 
         Fails if `timeout` expires before the element appears.
